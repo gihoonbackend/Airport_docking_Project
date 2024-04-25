@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Turtlebot -->
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+
+  
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch" />
+  <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_world.launch" />
+
+  <!-- Spawn Pattern Model(spawn charging station model) -->
+  <!--param name="pattern_description" textfile="$(find pattern_matcher)/urdf/pattern.urdf"-->
+  <param name="pattern_description" textfile="$(find laser2pc)/urdf/pattern.urdf"/>
+
+  <!-- spawn turtlebot model-->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+
+  <!-- robot_state_publisher package is needed to install by sudo apt install ros-YourRosVersion-robot-state-publisher-->
+  <node name="pattern_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+      <remap from="robot_description" to="pattern_description" />
+      <remap from="/joint_states" to="/pattern_joint_states" />
+  </node>
+
+  <!-- joint_state_publisher package is needed to install by sudo apt install ros-YourRosVersion-robot-state-publisher-->
+  <node name="pattern_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      <remap from="robot_description" to="pattern_description" />
+      <remap from="/joint_states" to="/pattern_joint_states" />
+  </node>
+
+  <!-- spawn charging station on desired location in gazebo environment-->
+  <node name="pattern_spawn_robot" pkg="gazebo_ros" type="spawn_model" args="-urdf -param pattern_description -model pattern -x -0.5 -y -0.5 -z 0.25 -Y -1.5707"/>
+
+  <!-- rviz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find laser2pc)/rviz/docking.rviz"/>
+
+  
+  <!-- python -->
+
+   <node name="python3_node" pkg="laser2pc" type="laser2pc.py" output="screen"/>
+   <node name="python3_node1" pkg="laser2pc" type="clustering_RANSAC_ros_sgh.py" output="screen"/>
+   <node name="python3_node2" pkg="laser2pc" type="line_sgh.py" output="screen"/> 
+   <node name="python3_node3" pkg="laser2pc" type="bottom_marker_sgh.py" output="screen"/> 
+   
+</launch>
