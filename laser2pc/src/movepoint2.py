@@ -7,85 +7,101 @@ import tf2_ros
 import tf2_geometry_msgs
 import numpy as np
 
-class LineFollower:
+class TurtlebotMover:
     def __init__(self):
-        rospy.init_node('line_follower', anonymous=True)
+        rospy.init_node('turtlebot_mover', anonymous=True)
 
         self.tf_buffer = tf2_ros.Buffer()
         self.tf_listener = tf2_ros.TransformListener(self.tf_buffer)
 
         self.velocity_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-        self.marker_subscriber = rospy.Subscriber('/line', Marker, self.marker_callback)
+        self.bottom_point_subscriber = rospy.Subscriber('/Bottom_point', Marker, self.bottom_point_callback)
+        self.top_point_subscriber = rospy.Subscriber('/Top_point', Marker, self.top_point_callback)
 
         self.linear_speed = 0.1  # m/s
         self.angular_speed = 0.1  # rad/s
+        self.distance_threshold = 0.05  # m, desired distance to stop near the target
+        self.angle_threshold = 0.05  # rad, desired angle precision
 
-        self.line_points = []
-        self.line_received = False
+        self.bottom_point = None
+        self.bottom_point_received = False
+        self.top_point = None
+        self.top_point_received = False
 
-    def marker_callback(self, msg):
-        if not self.line_received and len(msg.points) >= 8:
-            # Extract the points from the marker message
-            self.line_points = [msg.points[6], msg.points[7]]  # 노란색 선분의 시작점과 끝점
-            self.line_received = True
-            self.follow_line()
+    def bottom_point_callback(self, msg):
+        if not self.bottom_point_received:
+            self.bottom_point = msg.pose.position
+            self.bottom_point_received = True
+            rospy.loginfo(f"Received bottom point: x={self.bottom_point.x}, y={self.bottom_point.y}, z={self.bottom_point.z}")
+            self.move_to_target(self.bottom_point, after_move=self.wait_and_move_to_top_point)
 
-    def follow_line(self):
-        start_point_stamped = PointStamped()
-        end_point_stamped = PointStamped()
+    def top_point_callback(self, msg):
+        if not self.top_point_received:
+            self.top_point = msg.pose.position
+            self.top_point_received = True
+            rospy.loginfo(f"Received top point: x={self.top_point.x}, y={self.top_point.y}, z={self.top_point.z}")
 
-        start_point_stamped.header.frame_id = "base_scan"
-        start_point_stamped.point = self.line_points[0]
-        end_point_stamped.header.frame_id = "base_scan"
-        end_point_stamped.point = self.line_points[1]
+    def wait_and_move_to_top_point(self):
+        rospy.sleep(3)  # Wait for 3 seconds
+        if self.top_point_received:
+            rospy.loginfo("Moving to top point...")
+            self.move_to_target(self.top_point)
+
+    def move_to_target(self, target_point, stop_at_target=True, after_move=None):
+        # Transform the target point from the map frame to the base_link frame
+        target_point_stamped = PointStamped()
+        target_point_stamped.header.frame_id = "map"
+        target_point_stamped.point = target_point
 
         try:
-            transform = self.tf_buffer.lookup_transform("map", "base_scan", rospy.Time(0), rospy.Duration(1.0))  # Replace "map" with your target frame
-            transformed_start_point = tf2_geometry_msgs.do_transform_point(start_point_stamped, transform)
-            transformed_end_point = tf2_geometry_msgs.do_transform_point(end_point_stamped, transform)
+            transform = self.tf_buffer.lookup_transform("base_link", "map", rospy.Time(0), rospy.Duration(1.0))
+            transformed_target_point = tf2_geometry_msgs.do_transform_point(target_point_stamped, transform)
+            rospy.loginfo(f"Transformed target point: x={transformed_target_point.point.x}, y={transformed_target_point.point.y}, z={transformed_target_point.point.z}")
 
-            rospy.loginfo(f"Transformed start point coordinates: x={transformed_start_point.point.x}, y={transformed_start_point.point.y}, z={transformed_start_point.point.z}")
-            rospy.loginfo(f"Transformed end point coordinates: x={transformed_end_point.point.x}, y={transformed_end_point.point.y}, z={transformed_end_point.point.z}")
+            vel_msg = Twist()
+            distance = np.sqrt(transformed_target_point.point.x**2 + transformed_target_point.point.y**2)
+            angle_to_target = np.arctan2(transformed_target_point.point.y, transformed_target_point.point.x)
 
-            # Move to the start point of the line
-            self.move_to_target(transformed_start_point.point)
+            rospy.loginfo(f"Moving to target: x={transformed_target_point.point.x}, y={transformed_target_point.point.y}, z={transformed_target_point.point.z}, distance={distance}, angle={angle_to_target}")
 
-            # Move to the end point of the line
-            self.move_to_target(transformed_end_point.point)
+            # Rotate towards the target point
+            while abs(angle_to_target) > self.angle_threshold:
+                vel_msg.angular.z = self.angular_speed if angle_to_target > 0 else -self.angular_speed
+                self.velocity_publisher.publish(vel_msg)
+                rospy.sleep(0.1)  # Short sleep to allow rotation
+                transform = self.tf_buffer.lookup_transform("base_link", "map", rospy.Time(0), rospy.Duration(1.0))
+                transformed_target_point = tf2_geometry_msgs.do_transform_point(target_point_stamped, transform)
+                angle_to_target = np.arctan2(transformed_target_point.point.y, transformed_target_point.point.x)
+                vel_msg.angular.z = 0
+                self.velocity_publisher.publish(vel_msg)
+
+            # Move straight to the target point
+            while distance > self.distance_threshold:
+                vel_msg.linear.x = self.linear_speed
+                self.velocity_publisher.publish(vel_msg)
+                rospy.sleep(0.1)  # Short sleep to allow movement
+                transform = self.tf_buffer.lookup_transform("base_link", "map", rospy.Time(0), rospy.Duration(1.0))
+                transformed_target_point = tf2_geometry_msgs.do_transform_point(target_point_stamped, transform)
+                distance = np.sqrt(transformed_target_point.point.x**2 + transformed_target_point.point.y**2)
+                vel_msg.linear.x = 0
+                self.velocity_publisher.publish(vel_msg)
+
+            if stop_at_target:
+                # Stop the robot
+                vel_msg.linear.x = 0
+                self.velocity_publisher.publish(vel_msg)
+
+            if after_move is not None:
+                after_move()
 
         except tf2_ros.LookupException as e:
             rospy.logerr(f"Transform lookup failed: {e}")
         except tf2_ros.ExtrapolationException as e:
             rospy.logerr(f"Transform extrapolation failed: {e}")
 
-    def move_to_target(self, target_point, stop_at_target=True):
-        vel_msg = Twist()
-
-        # Calculate distance and angle to the target point
-        distance = np.sqrt(target_point.x**2 + target_point.y**2)
-        angle_to_target = np.arctan2(target_point.y, target_point.x)
-
-        rospy.loginfo(f"Moving to target: x={target_point.x}, y={target_point.y}, z={target_point.z}, distance={distance}, angle={angle_to_target}")
-
-        # Rotate towards the target point
-        vel_msg.angular.z = self.angular_speed if angle_to_target > 0 else -self.angular_speed
-        self.velocity_publisher.publish(vel_msg)
-        rospy.sleep(abs(angle_to_target) / self.angular_speed)
-
-        # Move straight to the target point
-        vel_msg.linear.x = self.linear_speed
-        vel_msg.angular.z = 0
-        self.velocity_publisher.publish(vel_msg)
-        rospy.sleep(distance / self.linear_speed)
-
-        if stop_at_target:
-            # Stop the robot
-            vel_msg.linear.x = 0
-            self.velocity_publisher.publish(vel_msg)
-
     def run(self):
         rospy.spin()
 
 if __name__ == '__main__':
-    follower = LineFollower()
-    follower.run()
+    mover = TurtlebotMover()
+    mover.run()

@@ -18,6 +18,8 @@
 - Bottom point, Top point를 map frame 좌표로 변환 (map.py)
 - 주어진 좌표로 이동하는 파이썬 알고리즘 구현 중.
 
+# 6/12 진행상황
+- movepoint2.py : 로봇이 Bottom_point로 이동후 3초뒤에 Top_point쪽으로 회전 후 이동시키는 시나리오 구현.
 
 ### rull 
 - laser2pc - launch - docking.launch 파일에 필요한 파이썬 코드들 통합해놓은 상태.
