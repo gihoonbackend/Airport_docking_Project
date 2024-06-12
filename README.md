@@ -8,17 +8,15 @@
 - RANSAC은 inlier와 outlier를 구분하는 간편하면서도 효과적인 알고리즘
 - 포인트 클라우드가 형성되는 패턴에 따라 charging station의 중심부와 외곽부를 각각 inlier, outlier로 설정하여  두 클라스를 간단하면서 효율적으로 분리 가능
 
-현재 진행상황
+# 현재 진행상황
 ### RANSAC Line Segmentaion 
 - 포인트 클라우스에서 선형 모델을 찾아내는 알고리즘 수행
 - RANSAC Line Segmentaion (+ top point, bottom point) 
 
 
 # 6/11 진행상황
-Bottom point
-Top point
-map frame 좌표로 변환 (map.py)
-주어진 좌표로 이동하는 파이썬 알고리즘 구현 중.
+- Bottom point, Top point를 map frame 좌표로 변환 (map.py)
+- 주어진 좌표로 이동하는 파이썬 알고리즘 구현 중.
 
 
 ### rull 
