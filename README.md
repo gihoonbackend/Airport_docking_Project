@@ -33,4 +33,4 @@
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EA%B7%B8%EB%A6%BC4.png?raw=true)
 - bottom_point : line_sgh.py에서 생성시킨 세로선분의 가장 아래 포인트의 좌표를 추출하고 마커로 표시.
 - bottom_marker_sgh.py 는 map frame 기준 좌표가 추출되고, bottom_marker copy.py는 로봇 좌표계 기준 좌표가 발행됨( clustering_ransac_ros_sgh도 마찬가지임.)
-- 추출한 좌표를 이용해 로봇을 이동 시키는 코드 (아직 구현중임) 테스트 중인 코드 이름: follow_line_node.py, movepoint.py, movepoint2.py
+- 추출한 좌표를 이용해 로봇을 이동 시키는 코드 (아직 구현중임) 테스트 중인 코드 이름: follow_line_node.py, movepoint.py, movepoint2.py > movepoint2.py 구현 완료( 세부 조정 필요 )
