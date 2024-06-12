@@ -1,27 +1,27 @@
 # Airport_docking_Project
-이전 진행상황
-## Roi Filtering
+# 이전 진행상황
+### Roi Filtering
 - 센서에서 측정되는 Point Cloud를 줄여 불필요한 연산 부하를 줄이기 위해 사용
-## Euclidean Clustering
+### Euclidean Clustering
 - 가장 간단한 방법의 군집화 방법으로 두 점 사이의 유클리드 거리를 계산하여, 특정 거리 이하일 경우 동일한 군집으로 간주
-## RANSAC
+### RANSAC
 - RANSAC은 inlier와 outlier를 구분하는 간편하면서도 효과적인 알고리즘
 - 포인트 클라우드가 형성되는 패턴에 따라 charging station의 중심부와 외곽부를 각각 inlier, outlier로 설정하여  두 클라스를 간단하면서 효율적으로 분리 가능
 
 현재 진행상황
-## RANSAC Line Segmentaion 
+### RANSAC Line Segmentaion 
 - 포인트 클라우스에서 선형 모델을 찾아내는 알고리즘 수행
 - RANSAC Line Segmentaion (+ top point, bottom point) 
 
 
-6/11 진행상황
+# 6/11 진행상황
 Bottom point
 Top point
 map frame 좌표로 변환 (map.py)
 주어진 좌표로 이동하는 파이썬 알고리즘 구현 중.
 
 
-## rull 
+### rull 
 - laser2pc - launch - docking.launch 파일에 필요한 파이썬 코드들 통합해놓은 상태.
 - 런치 실행 후, 발행되어진 토픽(line, bottom point, top point) 실행 
 - 로봇은 충전 스테이션에 가깝게 위치해놓아야 코드가 제대로 실행되어짐. 
@@ -30,4 +30,3 @@ map frame 좌표로 변환 (map.py)
 - bottom_point : line_sgh.py에서 생성시킨 세로선분의 가장 아래 포인트의 좌표를 추출하고 마커로 표시.
 - bottom_marker_sgh.py 는 map frame 기준 좌표가 추출되고, bottom_marker copy.py는 로봇 좌표계 기준 좌표가 발행됨( clustering_ransac_ros_sgh도 마찬가지임.)
 - 추출한 좌표를 이용해 로봇을 이동 시키는 코드 (아직 구현중임) 테스트 중인 코드 이름: follow_line_node.py, movepoint.py, movepoint2.py
--
