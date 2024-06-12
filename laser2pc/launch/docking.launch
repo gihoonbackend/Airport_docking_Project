@@ -38,7 +38,7 @@
 
    <node name="python3_node" pkg="laser2pc" type="laser2pc.py" output="screen"/>
    <node name="python3_node1" pkg="laser2pc" type="clustering_RANSAC_ros_sgh.py" output="screen"/>
-   <node name="python3_node2" pkg="laser2pc" type="line_sgh.py" output="screen"/> 
-   <node name="python3_node3" pkg="laser2pc" type="bottom_marker_sgh.py" output="screen"/> 
-   
+   <node name="python3_node2" pkg="laser2pc" type="line_sgh.py" output="screen"/>
+   <node name="python3_node3" pkg="laser2pc" type="bottom_marker_sgh.py" output="screen"/>
+   <node name="python3_node4" pkg="laser2pc" type="map.py" output="screen"/>
 </launch>

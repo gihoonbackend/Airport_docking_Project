@@ -10,14 +10,15 @@ import pcl
 import filtering_helper
 import rviz_visualizer as visual
 from visualization_msgs.msg import Marker
-from geometry_msgs.msg import Point, PointStamped, Twist
-import tf2_ros
-import tf2_geometry_msgs
+from geometry_msgs.msg import Point
 
-laserProj = LaserProjection()
+laserProj=LaserProjection()
+    
 
 def do_euclidean_clustering(white_cloud, tolerance, min_size, max_size):
+
     tree = white_cloud.make_kdtree()
+
     ec = white_cloud.make_EuclideanClusterExtraction()
     ec.set_ClusterTolerance(tolerance)
     ec.set_MinClusterSize(min_size)
@@ -25,22 +26,27 @@ def do_euclidean_clustering(white_cloud, tolerance, min_size, max_size):
     ec.set_SearchMethod(tree)
     cluster_indices = ec.Extract()
     cluster_color = pcl_helper.get_color_list(len(cluster_indices))
+
     color_cluster_point_list = []
+
     for j, indices in enumerate(cluster_indices):
         for i, indice in enumerate(indices):
             color_cluster_point_list.append([white_cloud[indice][0],
                                              white_cloud[indice][1],
                                              white_cloud[indice][2],
                                              pcl_helper.rgb_to_float(cluster_color[j])])
+
     cluster_cloud = pcl.PointCloud_PointXYZRGB()
     cluster_cloud.from_list(color_cluster_point_list)
-    return cluster_cloud, cluster_indices
+    return cluster_cloud,cluster_indices
 
-def do_passthrough(pcl_data, filter_axis, axis_min, axis_max):
+def do_passthrough(pcl_data,filter_axis,axis_min,axis_max):
+
     passthrough = pcl_data.make_passthrough_filter()
     passthrough.set_filter_field_name(filter_axis)
     passthrough.set_filter_limits(axis_min, axis_max)
     return passthrough.filter()
+
 
 def do_ransac_line_segmentation(point_cloud, input_max_distance):
     segmenter = point_cloud.make_segmenter()
@@ -56,8 +62,11 @@ def do_ransac_line_segmentation(point_cloud, input_max_distance):
     inlier_object = point_cloud.extract(inliers, negative=False)
     outlier_object = point_cloud.extract(inliers, negative=True)
 
+
     for i in range(0, len(inliers)):      #range(0, len(inlires)):
+
         return inlier_object, outlier_object, coefficients, inliers
+    
 
 def pcl_callback(pcl_msg):
     max_distance = 0.018  # RANSAC 알고리즘에 사용할 최대 거리 임계값 설정
@@ -122,35 +131,20 @@ def publish_line_marker(coefficients, min_point, max_point):
     
     # 네 번째 선분: y 방향으로 중심을 통과하는 선분 (노란색)
     point7 = Point(mid_point[0], mid_point[1], mid_point[2])
-    point8 = Point(mid_point[0] - 0.2, mid_point[1], mid_point[2])
+    point8 = Point(mid_point[0] - 0.4, mid_point[1], mid_point[2])
     
     bottom_point = find_bottom_point(point7, point8)
-    ## rospy.loginfo("Bottom point before transform: x={}, y={}, z={}".format(bottom_point.x, bottom_point.y, bottom_point.z))
+    print("Bottom point:", bottom_point)
 
-    # Transform the bottom point to the map frame
-    bottom_point_stamped = PointStamped()
-    bottom_point_stamped.header.frame_id = "base_scan"  # Replace with the frame ID of your input cloud
-    bottom_point_stamped.point = bottom_point
-
-    try:
-        transform = tf_buffer.lookup_transform("map", "base_scan", rospy.Time(0), rospy.Duration(1.0))  # Replace "map" with your target frame
-        transformed_bottom_point = tf2_geometry_msgs.do_transform_point(bottom_point_stamped, transform)
-        rospy.loginfo("Transformed bottom point: x={}, y={}, z={}".format(transformed_bottom_point.point.x, transformed_bottom_point.point.y, transformed_bottom_point.point.z))
-    except tf2_ros.LookupException as e:
-        rospy.logerr(f"Transform lookup failed: {e}")
-        return
-    except tf2_ros.ExtrapolationException as e:
-        rospy.logerr(f"Transform extrapolation failed: {e}")
-        return
 
     marker = Marker()
-    marker.header.frame_id = "map"  # Publish in the map frame
+    marker.header.frame_id = "base_scan"
     marker.type = Marker.SPHERE
     marker.action = Marker.ADD
     marker.scale.x = 0.1
     marker.scale.y = 0.1
     marker.scale.z = 0.1
-    marker.pose.position = transformed_bottom_point.point
+    marker.pose.position = bottom_point
     marker.color = ColorRGBA(1.0, 1.0, 0.0, 1.0)  # Yellow
 
     # 마커 발행
@@ -164,24 +158,24 @@ def find_bottom_point(point1, point2):
     else:
         return point2
 
+
+
 if __name__ == '__main__':
-    rospy.init_node('clustering', anonymous=True)
 
-    global tf_buffer
-    tf_buffer = tf2_ros.Buffer()
-    tf_listener = tf2_ros.TransformListener(tf_buffer)
+    rospy.init_node('clustering', anonymous = True)
 
-    subscriber = rospy.Subscriber('/laserPointCloud', PointCloud2, pcl_callback, queue_size=1)
+    subscriber = rospy.Subscriber('/laserPointCloud',PointCloud2,pcl_callback,queue_size=1)
     
-    pcl_cloud_cut_pub1 = rospy.Publisher("/pcl_cloud_cut2", PointCloud2, queue_size=1)
-    pcl_cloud_cut_pub2 = rospy.Publisher("/cluster_cloud", PointCloud2, queue_size=1)
+    pcl_cloud_cut_pub1 = rospy.Publisher("/pcl_cloud_cut2", PointCloud2, queue_size = 1)
+    pcl_cloud_cut_pub2 = rospy.Publisher("/cluster_cloud", PointCloud2, queue_size = 1)
     
-    pcl_station_pub = rospy.Publisher("/pcl_station", PointCloud2, queue_size=1)
-    pcl_column_pub = rospy.Publisher("/pcl_column", PointCloud2, queue_size=1)
+    pcl_station_pub = rospy.Publisher("/pcl_station", PointCloud2, queue_size = 1)
+    pcl_column_pub = rospy.Publisher("/pcl_column", PointCloud2, queue_size = 1)
     
-    marker_pub = rospy.Publisher('Bottom_point', Marker, queue_size=10)
-
+    marker_pub = rospy.Publisher('Bottom_point',Marker,queue_size = 10)
+    
     pcl_helper.get_color_list.color_list = []
+    #print('success')
 
     while not rospy.is_shutdown():
         rospy.spin()

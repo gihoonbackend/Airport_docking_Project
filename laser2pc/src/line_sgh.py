@@ -11,6 +11,8 @@ import filtering_helper
 import rviz_visualizer as visual
 from visualization_msgs.msg import Marker
 from geometry_msgs.msg import Point
+from tf.transformations import euler_from_quaternion
+from tf import TransformListener
 
 laserProj=LaserProjection()
     
@@ -67,6 +69,38 @@ def do_ransac_line_segmentation(point_cloud, input_max_distance):
 
         return inlier_object, outlier_object, coefficients, inliers
     
+from math import cos, sin, radians
+
+def adjust_line_direction(min_point, max_point, current_angle):
+    # Calculate the midpoint of the line
+    midpoint_x = (min_point[0] + max_point[0]) / 2.0
+    midpoint_y = (min_point[1] + max_point[1]) / 2.0
+    
+    # Calculate the vector from the midpoint to the start point (min_point)
+    dx = min_point[0] - midpoint_x
+    dy = min_point[1] - midpoint_y
+    
+    # Rotate the vector by the current angle
+    rotated_dx = dx * cos(current_angle) - dy * sin(current_angle)
+    rotated_dy = dx * sin(current_angle) + dy * cos(current_angle)
+    
+    # Calculate the new start point (min_point)
+    new_min_point_x = midpoint_x + rotated_dx
+    new_min_point_y = midpoint_y + rotated_dy
+    
+    # Calculate the vector from the midpoint to the end point (max_point)
+    dx = max_point[0] - midpoint_x
+    dy = max_point[1] - midpoint_y
+    
+    # Rotate the vector by the current angle
+    rotated_dx = dx * cos(current_angle) - dy * sin(current_angle)
+    rotated_dy = dx * sin(current_angle) + dy * cos(current_angle)
+    
+    # Calculate the new end point (max_point)
+    new_max_point_x = midpoint_x + rotated_dx
+    new_max_point_y = midpoint_y + rotated_dy
+    
+    return [new_min_point_x, new_min_point_y, min_point[2]], [new_max_point_x, new_max_point_y, max_point[2]]
 
 def pcl_callback(pcl_msg):
     max_distance = 0.018  # RANSAC 알고리즘에 사용할 최대 거리 임계값 설정
@@ -160,7 +194,7 @@ def publish_line_marker(coefficients, min_point, max_point):
 
     # 네 번째 선분: y 방향으로 중심을 통과하는 선분 (노란색)
     point7 = Point(mid_point[0] + 0.08, mid_point[1], mid_point[2])
-    point8 = Point(mid_point[0] - 0.4, mid_point[1], mid_point[2])
+    point8 = Point(mid_point[0] - 0.2, mid_point[1], mid_point[2])
     marker.points.append(point7)
     marker.points.append(point8)
     
