@@ -23,13 +23,13 @@
 # 6/13 진행상황
 - Top point 수정 : 기존의 방법이었던 docking station의 가장 높은 y축을 Top_point로 지정하였던 방법을 대체하였음.
 이 방법은 Top_point가 실시간으로 불안정한 모습을 보임. 
-![top_point](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/5cedc323-6fd4-4904-bfa3-4307974b3f58)
+![Toppoint](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/bd801a10-9738-4c9e-ada4-b73d4c2621bc)
 - Top_point > arrive_point로 대체 : 기존의 방법을 대체하여 docking station의 가로측의 중간값(station부분의 포인트들의 x값 평균값)으로 설정하여 구현. 기존의 point보다 안정적인 모습을 보임.    
-![arrive_point](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/1ca2cd02-91f4-4303-a60d-b6b9337cf400)
-- move_point2 : Top_point 수정과 파라미터 수정으로 인해 로봇 주행이 이전보다 훨씬 정확해짐.
-![docking_robot](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/83254021-0886-41f6-93d1-0fcab66b5f93)
-  
 ![arrive_point](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/e2d01c52-16d3-4c75-8ce1-d45fc458d957)
+
+- move_point2 : Top_point 수정과 파라미터 수정으로 인해 로봇 주행이 이전보다 훨씬 정확해짐.
+![docking](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/531e82e0-83a1-46d2-95cf-fd2216e09242)
+
 
 
 
