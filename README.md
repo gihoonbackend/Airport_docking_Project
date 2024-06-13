@@ -20,6 +20,17 @@
 
 # 6/12 진행상황
 - movepoint2.py : 로봇이 Bottom_point로 이동후 3초뒤에 Top_point쪽으로 회전 후 이동시키는 시나리오 구현.
+# 6/13 진행상황
+- Top point 수정 : 기존의 방법이었던 docking station의 가장 높은 y축을 Top_point로 지정하였던 방법을 대체하였음.
+이 방법은 Top_point가 실시간으로 불안정한 모습을 보임.  
+![top_point](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/5cedc323-6fd4-4904-bfa3-4307974b3f58)
+- Top_point > arrive_point로 대체 : 기존의 방법을 대체하여 docking station의 가로측의 중간값(station부분의 포인트들의 x값 평균값)으로 설정하여 구현. 기존의 point보다 안정적인 모습을 보임.    
+![arrive_point](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/1ca2cd02-91f4-4303-a60d-b6b9337cf400)
+
+
+
+
+
 
 ### rull 
 - laser2pc - launch - docking.launch 파일에 필요한 파이썬 코드들 통합해놓은 상태.
@@ -30,7 +41,8 @@
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EA%B7%B8%EB%A6%BC2.png?raw=true)
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EA%B7%B8%EB%A6%BC3.png?raw=true)
 - top_point : inline 부분의 가장 높은 좌표를 추출하고 마커로 표시.
-![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EA%B7%B8%EB%A6%BC4.png?raw=true)
+
 - bottom_point : line_sgh.py에서 생성시킨 세로선분의 가장 아래 포인트의 좌표를 추출하고 마커로 표시.
+![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EA%B7%B8%EB%A6%BC4.png?raw=true)
 - bottom_marker_sgh.py 는 map frame 기준 좌표가 추출되고, bottom_marker copy.py는 로봇 좌표계 기준 좌표가 발행됨( clustering_ransac_ros_sgh도 마찬가지임.)
 - 추출한 좌표를 이용해 로봇을 이동 시키는 코드 (아직 구현중임) 테스트 중인 코드 이름: follow_line_node.py, movepoint.py, movepoint2.py > movepoint2.py 구현 완료( 세부 조정 필요 )
