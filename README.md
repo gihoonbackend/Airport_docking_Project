@@ -11,6 +11,7 @@ Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진�
 <ROI Filtering 전>
 
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/ROI%201.png?raw=true)
+  
 <ROI Filtering 후>
 
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/ROI2.png?raw=true)
