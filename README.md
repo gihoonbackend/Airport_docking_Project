@@ -8,33 +8,28 @@ Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진�
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EA%B0%80%EC%A0%9C%EB%B3%B4.png?raw=true)
 ### Roi Filtering
 - 센서에서 측정되는 Point Cloud를 줄여 불필요한 연산 부하를 줄이기 위해 사용  
-<ROI Filtering 전>
-
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/ROI%201.png?raw=true)
   
-<ROI Filtering 후>
+<ROI Filtering 전>
 
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/ROI2.png?raw=true)
+<ROI Filtering 후>
 
 ### Euclidean Clustering
 - 가장 간단한 방법의 군집화 방법으로 두 점 사이의 유클리드 거리를 계산하여, 특정 거리 이하일 경우 동일한 군집으로 간주
   
-<Euclidean Clustering>
-  
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EC%97%90%EB%93%80%EC%8B%9C%EC%95%88.png?raw=true)
-
+<Euclidean Clustering>
 
 ### RANSAC
 - RANSAC은 inlier와 outlier를 구분하는 간편하면서도 효과적인 알고리즘
 - 포인트 클라우드가 형성되는 패턴에 따라 charging station의 중심부와 외곽부를 각각 inlier, outlier로 설정하여  두 클라스를 간단하면서 효율적으로 분리 가능
-  
-<inlier로 검출된 station 중심부>
 
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EB%9E%9C%EC%82%AD1.png?raw=true)
-  
-<outlier로 검출된 station 중심부>
+<inlier로 검출된 station 중심부>
 
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EB%9E%9C%EC%82%AD2.png?raw=true)
+<outlier로 검출된 station 중심부>
 # 현재 진행상황
 ### RANSAC Line Segmentaion 
 - 포인트 클라우스에서 선형 모델을 찾아내는 알고리즘 수행
