@@ -25,6 +25,7 @@ Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진�
 ### RANSAC
 - RANSAC은 inlier와 outlier를 구분하는 간편하면서도 효과적인 알고리즘
 - 포인트 클라우드가 형성되는 패턴에 따라 charging station의 중심부와 외곽부를 각각 inlier, outlier로 설정하여  두 클라스를 간단하면서 효율적으로 분리 가능
+
 <inlier로 검출된 station 중심부>
 
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EB%9E%9C%EC%82%AD1.png?raw=true)
