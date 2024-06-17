@@ -9,7 +9,6 @@ Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진�
 ### Roi Filtering
 - 센서에서 측정되는 Point Cloud를 줄여 불필요한 연산 부하를 줄이기 위해 사용  
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/ROI%201.png?raw=true)
-  
 <ROI Filtering 전>
 
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/ROI2.png?raw=true)
@@ -19,6 +18,7 @@ Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진�
 - 가장 간단한 방법의 군집화 방법으로 두 점 사이의 유클리드 거리를 계산하여, 특정 거리 이하일 경우 동일한 군집으로 간주
   
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EC%97%90%EB%93%80%EC%8B%9C%EC%95%88.png?raw=true)
+
 <Euclidean Clustering>
 
 ### RANSAC
