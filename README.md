@@ -9,9 +9,11 @@ Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진�
 ### Roi Filtering
 - 센서에서 측정되는 Point Cloud를 줄여 불필요한 연산 부하를 줄이기 위해 사용  
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/ROI%201.png?raw=true)
+  
 <ROI Filtering 전>
 
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/ROI2.png?raw=true)
+  
 <ROI Filtering 후>
 
 ### Euclidean Clustering
@@ -26,9 +28,11 @@ Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진�
 - 포인트 클라우드가 형성되는 패턴에 따라 charging station의 중심부와 외곽부를 각각 inlier, outlier로 설정하여  두 클라스를 간단하면서 효율적으로 분리 가능
 
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EB%9E%9C%EC%82%AD1.png?raw=true)
+  
 <inlier로 검출된 station 중심부>
 
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EB%9E%9C%EC%82%AD2.png?raw=true)
+  
 <outlier로 검출된 station 중심부>
 # 현재 진행상황
 ### RANSAC Line Segmentaion 
@@ -49,6 +53,7 @@ Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진�
 - Top_point > arrive_point로 대체 : 기존의 방법을 대체하여 docking station의 가로측의 중간값(station부분의 포인트들의 x값 평균값)으로 설정하여 구현. 기존의 point보다 안정적인 모습을 보임.    
 ![arrive_point](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/e2d01c52-16d3-4c75-8ce1-d45fc458d957)
 
+## 시뮬레이션 영상
 - move_point2 : Top_point 수정과 파라미터 수정으로 인해 로봇 주행이 이전보다 훨씬 정확해짐.
 ![docking](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/531e82e0-83a1-46d2-95cf-fd2216e09242)
 
