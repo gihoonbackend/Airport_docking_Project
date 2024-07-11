@@ -5,6 +5,7 @@
 - ROS 기반 모바일 로봇 turtlebot3를 오픈 소스 3D 로봇 공학 시뮬레이터인 Gazebo 환경에서 시뮬레이션
 Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진행
 - LiDAR에서 측정하는 data와 Docking 알고리즘의 연산 결과를 rviz에서 실시간으로 시각화 하며 테스트
+  
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EA%B0%80%EC%A0%9C%EB%B3%B4.png?raw=true)
 ### Roi Filtering
 - 센서에서 측정되는 Point Cloud를 줄여 불필요한 연산 부하를 줄이기 위해 사용  
@@ -58,7 +59,12 @@ Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진�
 ![docking](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/531e82e0-83a1-46d2-95cf-fd2216e09242)
 
 
+## 시뮬레이션 영상 Version 2
+- 현장 적용하기 전 실제 Charge Station과 같은 모델을 제작하여 시뮬레이션에서 테스트
+  
+- Top point, Bottom point 이용
 
+![docking](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/a26ae611-959a-44e9-8c0f-2afb32e62cf7)
 
 ### rull 
 - laser2pc - launch - docking.launch 파일에 필요한 파이썬 코드들 통합해놓은 상태.
