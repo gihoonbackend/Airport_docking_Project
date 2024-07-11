@@ -78,6 +78,7 @@ Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진�
 >- 런치 실행 후, 발행되어진 토픽(line, bottom point, top point) 실행 
 >- 로봇은 충전 스테이션에 가깝게 위치해놓아야 코드가 제대로 실행되어짐. 
 >- line_sgh.py : 클러스터링 되어진 부분을 이용하여 충전 스테이션의 outline으로는 가로 선분을 생성시키고, inline부분에서는 중간 좌표를 계산하여 가로선분을 수직으로 지나치는 세로 선분을 생성함.
+  
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EA%B7%B8%EB%A6%BC1.png?raw=true)
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EA%B7%B8%EB%A6%BC2.png?raw=true)
 ![RANSAC Line](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/%EA%B7%B8%EB%A6%BC3.png?raw=true)
