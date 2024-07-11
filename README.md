@@ -54,6 +54,10 @@ Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진�
 - Top_point > arrive_point로 대체 : 기존의 방법을 대체하여 docking station의 가로측의 중간값(station부분의 포인트들의 x값 평균값)으로 설정하여 구현. 기존의 point보다 안정적인 모습을 보임.    
 ![arrive_point](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/e2d01c52-16d3-4c75-8ce1-d45fc458d957)
 
+# 7/10 진행상황
+- 실제 charge station의 모양과 같은 모델 추가
+- 모델에 따른 알고리즘 수정(Station의 중간점 docking, Top_point tracking)
+
 ## 시뮬레이션 영상
 - move_point2 : Top_point 수정과 파라미터 수정으로 인해 로봇 주행이 이전보다 훨씬 정확해짐.
   
