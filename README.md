@@ -56,14 +56,17 @@ Gazebo 환경에 임시로 Charging Station을 설치하여 시뮬레이션 진�
 
 ## 시뮬레이션 영상
 - move_point2 : Top_point 수정과 파라미터 수정으로 인해 로봇 주행이 이전보다 훨씬 정확해짐.
-[모델사진]
+  
 ![docking](https://github.com/gihoonbackend/Airport_docking_Project/blob/main/image/model.png?raw=true)
   
-![docking](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/531e82e0-83a1-46d2-95cf-fd2216e09242)
+
 
 
 ## 시뮬레이션 영상 Version 2
 - 현장 적용하기 전 실제 Charge Station과 같은 모델을 제작하여 시뮬레이션에서 테스트
+[모델사진]
+  
+![docking](https://github.com/gihoonbackend/Airport_docking_Project/assets/126891083/531e82e0-83a1-46d2-95cf-fd2216e09242)
   
 - Top point, Bottom point 이용
 
